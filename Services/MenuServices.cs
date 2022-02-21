@@ -9,6 +9,9 @@ namespace MarketERP.Services
     {
         private static MarketService marketServices = new MarketService();
 
+
+        #region Products
+        
         public static void AddProductMenu()
         {
             Console.WriteLine("Məhsulun adını daxil edin");
@@ -70,20 +73,22 @@ namespace MarketERP.Services
                 Console.WriteLine(e.Message);
             }
         }
-        
-        
+
         public static void DisplayProducts()
         {
-            var table = new ConsoleTable("No", "Ad", "Qiymət","Say","Kod","Kategoriya");
+            var table = new ConsoleTable("No", "Ad", "Qiymət","Cəm Qiymət","Say","Kod","Kategoriya");
 
             foreach (var products in marketServices.Products)
             {
-                table.AddRow(products.No, products.Name, products.Price.ToString("#.00"), products.Quantity,products.Code,products.ProductCategory);
+                table.AddRow(products.No, products.Name, products.Price.ToString("#.00"),products.Quantity,(products.Price*products.Quantity).ToString("#.00"),products.Code,products.ProductCategory);
+                
             }
 
             table.Write();
             Console.WriteLine();
         }
+        
+        #endregion
         
     }
 }

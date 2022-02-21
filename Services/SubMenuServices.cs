@@ -33,7 +33,7 @@ namespace MarketERP.Services
                         MenuServices.AddProductMenu();
                         break;
                     case 2:
-                        Console.WriteLine("product 2");
+                        MenuServices.EditProductMenu("code");
                         break;
                     case 3:
                         Console.WriteLine("product 3");

@@ -1,3 +1,4 @@
+using System;
 using MarketERP.Data.Common;
 
 namespace MarketERP.Data.Entities
@@ -22,5 +23,7 @@ namespace MarketERP.Data.Entities
 
             No = _count;
         }
+
+        
     }
 }
