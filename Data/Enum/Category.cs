@@ -2,7 +2,7 @@ namespace MarketERP.Data
 {
     public enum Category
     {
-        Alchohol,
+        Alchohol=1,
         Dairy,
         Meat,
         Sweets,

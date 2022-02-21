@@ -1,5 +1,6 @@
 ﻿using System;
 using MarketERP.Services;
+using MarketERP.Data;
 
 namespace MarketERP
 {
@@ -8,13 +9,15 @@ namespace MarketERP
         static void Main(string[] args)
         {
             MainMenu();
+            
+            
         }
 
 
         public static void MainMenu()
         {
             int selection = 0;
-
+            
             do
             {
                 Console.WriteLine("1. Məhsullar");
@@ -30,10 +33,10 @@ namespace MarketERP
                 switch (selection)
                 {
                     case 1:
-                        MenuServices.DisplayProductSubMenu();
+                        SubMenuServices.DisplayProductSubMenu();
                         break;
                     case 2:
-                        MenuServices.DisplaySaleSubMenu();
+                        SubMenuServices.DisplaySaleSubMenu();
                         break;
                     case 3:
                         Console.WriteLine("Good bye");

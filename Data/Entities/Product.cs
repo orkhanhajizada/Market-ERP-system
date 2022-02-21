@@ -14,7 +14,7 @@ namespace MarketERP.Data.Entities
 
         public string Code { get; set; }
 
-        public Category Category { get; set; }
+        public Category ProductCategory { get; set; }
 
         public Product()
         {

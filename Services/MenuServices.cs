@@ -1,92 +1,88 @@
+using MarketERP.Data.Entities;
+using ConsoleTables;
 using System;
+using MarketERP.Data;
 
 namespace MarketERP.Services
 {
     public static class MenuServices
     {
-        public static void DisplayProductSubMenu()
+        private static MarketService marketServices = new MarketService();
+
+        public static void AddProductMenu()
         {
-            int selection = 0;
+            Console.WriteLine("Məhsulun adını daxil edin");
+            string name = Console.ReadLine();
 
-            do
+            Console.WriteLine("Məhsulun qiymətini daxil edin");
+            string price = Console.ReadLine();
+
+            Console.WriteLine("Məhsulun sayınısı daxil edin");
+            string quantity = Console.ReadLine();
+
+            Console.WriteLine("Məhsulun kodunu daxil edin");
+            string code = Console.ReadLine();
+
+            Console.WriteLine("Məhsulun kategoriyasını daxil edin");
+
+
+            Category category;
+        
+            Console.WriteLine("1. Alkoqollu içkilər");
+            Console.WriteLine("2. Süd və süd məhsulları");
+            Console.WriteLine("3. Ət və ət məhsulları");
+            Console.WriteLine("4. Şirniyyatlar");
+            Console.WriteLine("5. İçkilər");
+            Console.WriteLine("6. Çərəzlər");
+
+            string input = Console.ReadLine();
+
+            bool sucess = Enum.TryParse<Category>(input, out category);
+
+            if (!sucess)
             {
-                Console.WriteLine("1. Yeni məhsul əlavə et");
-                Console.WriteLine("2. Məhsulu redaktə et");
-                Console.WriteLine("3. Məhsulu sil");
-                Console.WriteLine("4. Bütün məhsullar");
-                Console.WriteLine("5. Kateqoriyaya görə məhsullar");
-                Console.WriteLine("6. Qiymət aralığına görə məhsullar");
-                Console.WriteLine("7. Ada görə axtarış");
-                Console.WriteLine("8. Ana səhifəyə qayıt");
-                
-                Console.WriteLine("Zəhmət olmasa menudan seçim edin");
-                
-                string selectionStr = Console.ReadLine();
-                selection = int.Parse(selectionStr);
+                Console.WriteLine("entry {0} is not a valid country", input);
+                return;
+            }
 
+            switch (category)
+            {
+                case Category.Alchohol:
+                    category = Category.Alchohol;
+                    break;
+                case Category.Dairy:
+                    category = Category.Dairy;
+                    break;
+                case Category.Meat:
+                    category = Category.Meat;
+                    break;
+            }
 
-                switch (selection)
-                {
-                    case 1:
-                        Console.WriteLine("product 1");
-                        break;
-                    case 2:
-                        Console.WriteLine("product 2");
-                        break;
-                    case 3:
-                        Console.WriteLine("product 3");
-                        break;
-                    case 8:
-                        Program.MainMenu();
-                        break;
-                    default:
-                        break;
-                }
-                
-            } while (selection != 8);
+            try
+            {
+                marketServices.AddProduct(name, double.Parse(price), int.Parse(quantity), code, category);
+                Console.WriteLine("Məhsul əlavə edildi");
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Yenidən cəhd edin");
+                Console.WriteLine(e.Message);
+            }
         }
-
-        public static void DisplaySaleSubMenu()
+        
+        
+        public static void DisplayProducts()
         {
-            int selection = 0;
+            var table = new ConsoleTable("No", "Ad", "Qiymət","Say","Kod","Kategoriya");
 
-            do
+            foreach (var products in marketServices.Products)
             {
-                Console.WriteLine("1. Yeni satış əlavə et");
-                Console.WriteLine("2. Staışın anbara qayıtması");
-                Console.WriteLine("3. Satışın silinməsi");
-                Console.WriteLine("4. Satışların siyahısı");
-                Console.WriteLine("5. Tarix aralığına görə satışlar");
-                Console.WriteLine("6. Satış qiyməti aralığına görə satışlar");
-                Console.WriteLine("7. Verilmiş tarixdəki satışlar");
-                Console.WriteLine("8. Satış nömrəsinə görə axtarış");
-                Console.WriteLine("9. Ana səhifəyə qayıt");
-                
-                Console.WriteLine("Please select your option");
-                
-                string selectionStr = Console.ReadLine();
-                selection = int.Parse(selectionStr);
+                table.AddRow(products.No, products.Name, products.Price.ToString("#.00"), products.Quantity,products.Code,products.ProductCategory);
+            }
 
-
-                switch (selection)
-                {
-                    case 1:
-                        Console.WriteLine("sale 1");
-                        break;
-                    case 2:
-                        Console.WriteLine("sale 2");
-                        break;
-                    case 3:
-                        Console.WriteLine("sale 3");
-                        break;
-                    case 9:
-                        Program.MainMenu();
-                        break;
-                    default:
-                        break;
-                }
-                
-            }while (selection != 9);
+            table.Write();
+            Console.WriteLine();
         }
         
     }
