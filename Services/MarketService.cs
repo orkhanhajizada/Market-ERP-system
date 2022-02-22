@@ -29,6 +29,11 @@ namespace MarketERP.Services
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("fullname");
+            
+            Product products = Products.FirstOrDefault(p => p.Code == code);
+
+            if (products != null)
+                throw new ArgumentException();
 
             if (string.IsNullOrEmpty(code))
                 throw new ArgumentNullException("code");
@@ -52,54 +57,46 @@ namespace MarketERP.Services
 
             return product.No;
 
-
-
         }
         
-        
-        public int EditProduct(string code)
+        public int EditProduct(string newName, double newPrice, int newQuantity, string newCode, Category category,string oldCode)
         {
-            if (string.IsNullOrEmpty(code))
-                throw new ArgumentNullException("code");
-            
-
-            Product product = Products.Find(p => p.Code.ToString() == code.ToString());
-
-            Console.WriteLine("Redaktə etmək istədiyiniz məhsulun adı {0}" , product.Name);
-            
-            return product.No;
-
-
-        }
-        public int EditProduct(string name, double price, int quantity, string code, Category category)
-        {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(newName))
                 throw new ArgumentNullException("fullname");
 
-            if (string.IsNullOrEmpty(code))
+            if (string.IsNullOrEmpty(newCode))
                 throw new ArgumentNullException("code");
 
-            if (price <= 0)
+            if (newPrice <= 0)
                 throw new ArgumentOutOfRangeException("price");
             
-            if (quantity <= 0)
+            if (newQuantity <= 0)
                 throw new ArgumentOutOfRangeException("quantity");
 
 
-            Product product = new();
+            Product product = Products.FirstOrDefault(p => p.Code == oldCode);
 
-            product.Name = name;
-            product.Price = price;
-            product.Quantity = quantity;
-            product.Code = code;
+            product.Name = newName;
+            product.Price = newPrice;
+            product.Quantity = newQuantity;
+            product.Code = newCode;
             product.ProductCategory = category;
-            
-            Products.Add(product);
 
             return product.No;
 
 
 
+        }
+        
+        public void DeleteProduct(string code)
+        {
+            
+            Product product = Products.FirstOrDefault(p => p.Code == code);
+
+            if (product == null)
+                throw new ArgumentNullException();
+
+            Products.Remove(product);
         }
           
         #endregion

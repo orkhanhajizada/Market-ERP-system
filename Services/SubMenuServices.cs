@@ -33,13 +33,16 @@ namespace MarketERP.Services
                         MenuServices.AddProductMenu();
                         break;
                     case 2:
-                        MenuServices.EditProductMenu("code");
+                        MenuServices.EditProductMenu();
                         break;
                     case 3:
-                        Console.WriteLine("product 3");
+                        MenuServices.DeleteProductMenu();
                         break;
                     case 4:
                         MenuServices.DisplayProducts();
+                        break;
+                    case 5:
+                        MenuServices.DisplayProductsByCategory();
                         break;
                     case 8:
                         Program.MainMenu();
