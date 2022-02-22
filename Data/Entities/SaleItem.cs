@@ -7,9 +7,15 @@ namespace MarketERP.Data.Entities
     {
         private static int _count = 0;
         
-        public Product Product { get; set; }
+        public Product ProductCode { get; set; }
+        
+        public  Sale SaleNo { get; set; }
         
         public int Quantity { get; set; }
+        
+        public double Price { get; set; }
+        
+        
 
 
         public SaleItem()

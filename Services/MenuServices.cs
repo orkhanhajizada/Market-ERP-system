@@ -384,6 +384,89 @@ namespace MarketERP.Services
         #endregion
         
         
+        #region Sale
+        
+        public static void AddSaleItemMenu(Sale sale)
+        {
+            Console.WriteLine("Məhsulun kodunu daxil edin");
+            string code = Console.ReadLine();
+
+            Product product = marketServices.Products.FirstOrDefault(p => p.Code == code);
+
+            Console.WriteLine("Məhsulun sayını daxil edin");
+            int quantity = Int32.Parse(Console.ReadLine());
+
+            Console.WriteLine("Məhsulun satış qiymətini daxil edin");
+            double price = Double.Parse(Console.ReadLine());
+
+            try
+            {
+                marketServices.AddSaleItem(product, quantity, price,sale);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine("Məhsulun sayı və ya qiyməti düzgün deyil");
+                throw;
+            }
+           
+
+
+        }
+            
+        public static void AddSaleMenu()
+        {
+            Sale sale = marketServices.AddSale(DateTime.Now);
+
+            AddSaleItemMenu(sale);
+
+            Console.WriteLine("Məhsul əlavə etmək istəyirsinizmi? Y/N");
+            string answer = Console.ReadLine()?.ToUpper();
+
+            if (answer == "Y")
+            {
+                AddSaleMenu();
+            }
+            else if (answer == "N")
+            {
+                try
+                {
+                    Console.WriteLine("Satış əlavə edildi");
+                    SubMenuServices.DisplaySaleSubMenu();
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine("Məhsul sayı azdır");
+                    SubMenuServices.DisplaySaleSubMenu();
+                }
+               
+            }
+            else
+            {
+                AddSaleMenu();
+            }
+            
+            
+        }
+        
+        
+        public static void DisplaySales()
+        {
+            var table = new ConsoleTable("No", "Məbləğ","Tarix");
+            
+
+            foreach (var sale  in marketServices.SaleItems)
+            {
+                table.AddRow(sale.SaleNo.No, sale.Price * sale.Quantity,sale.SaleNo.SaleDate);
+                
+            }
+
+            table.Write();
+            Console.WriteLine();
+        }
+
+        
+        #endregion
+        
    
     }
 }

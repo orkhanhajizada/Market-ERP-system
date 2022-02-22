@@ -85,10 +85,10 @@ namespace MarketERP.Services
                 switch (selection)
                 {
                     case 1:
-                        Console.WriteLine("sale 1");
+                        MenuServices.AddSaleMenu();
                         break;
-                    case 2:
-                        Console.WriteLine("sale 2");
+                    case 4:
+                        MenuServices.DisplaySales();
                         break;
                     case 3:
                         Console.WriteLine("sale 3");

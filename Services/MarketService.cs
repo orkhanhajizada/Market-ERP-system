@@ -100,5 +100,48 @@ namespace MarketERP.Services
         }
           
         #endregion
+
+
+        #region Sale
+
+        public Sale AddSale(DateTime date)
+        {
+            Sale sale = new Sale()
+            {
+                SaleDate = date,
+                TotalPrice = 0
+            };
+
+            return sale;
+        }
+        public int AddSaleItem(Product product,int quantity, double price,Sale sale)
+        {
+            
+            if (price <= 0)
+                throw new ArgumentOutOfRangeException("price");
+            
+            if (quantity <= 0 && quantity> product.Quantity)
+                throw new ArgumentOutOfRangeException("quantity");
+            
+            
+            SaleItem saleItem = new();
+
+            saleItem.ProductCode = product;
+            saleItem.Quantity = quantity;
+            saleItem.Price = price;
+            saleItem.SaleNo = sale;
+            sale.TotalPrice = sale.TotalPrice + (price * quantity) ;
+            product.Quantity = product.Quantity - quantity;
+            
+            
+            SaleItems.Add(saleItem);
+
+            return product.No;
+        }
+
+
+
+
+        #endregion
     }
 }
