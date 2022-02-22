@@ -319,6 +319,68 @@ namespace MarketERP.Services
             Console.WriteLine();
         }
         
+        
+        public static void DisplayProductsByPriceRange()
+        {
+            
+            
+            Console.WriteLine("Qiymet aralıöını daxil edin");
+            
+            Console.WriteLine("Minimum məbləğ");
+            double minPrice = double.Parse(Console.ReadLine());
+            
+            Console.WriteLine("Maksimum məbləğ");
+            double maxPrice = double.Parse(Console.ReadLine());
+            
+
+            List<Product> productsByPrice = marketServices.Products.FindAll(p => p.Price >= minPrice && p.Price<= maxPrice);
+
+            if (productsByPrice.Count <= 0)
+            {
+                Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
+                SubMenuServices.DisplayProductSubMenu();
+            }
+            
+            var table = new ConsoleTable("No", "Ad", "Qiymət","Say","Cəm Qiymət","Kod","Kategoriya");
+
+            foreach (var products in productsByPrice)
+            {
+                table.AddRow(products.No, products.Name, products.Price.ToString("#.00"),products.Quantity,(products.Price*products.Quantity).ToString("#.00"),products.Code,products.ProductCategory);
+                
+            }
+
+            table.Write();
+            Console.WriteLine();
+        }
+        
+        public static void DisplayProductsByName()
+        {
+            
+            
+            Console.WriteLine("Məhsulun adını daxil edin");
+            string name = Console.ReadLine();
+            
+
+            List<Product> productsByName = marketServices.Products.FindAll(p => p.Name.ToLower().Contains(name.ToLower()));
+
+            if (productsByName.Count <= 0)
+            {
+                Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
+                SubMenuServices.DisplayProductSubMenu();
+            }
+            
+            var table = new ConsoleTable("No", "Ad", "Qiymət","Say","Cəm Qiymət","Kod","Kategoriya");
+
+            foreach (var products in productsByName)
+            {
+                table.AddRow(products.No, products.Name, products.Price.ToString("#.00"),products.Quantity,(products.Price*products.Quantity).ToString("#.00"),products.Code,products.ProductCategory);
+                
+            }
+
+            table.Write();
+            Console.WriteLine();
+        }
+        
         #endregion
         
         

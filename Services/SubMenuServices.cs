@@ -44,6 +44,12 @@ namespace MarketERP.Services
                     case 5:
                         MenuServices.DisplayProductsByCategory();
                         break;
+                    case 6:
+                        MenuServices.DisplayProductsByPriceRange();
+                        break;
+                    case 7:
+                        MenuServices.DisplayProductsByName();
+                        break;
                     case 8:
                         Program.MainMenu();
                         break;
