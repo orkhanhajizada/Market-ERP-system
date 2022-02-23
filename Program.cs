@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using MarketERP.Services;
 using MarketERP.Data;
+using MarketERP.Data.Entities;
 
 namespace MarketERP
 {
@@ -8,14 +11,19 @@ namespace MarketERP
     {
         static void Main(string[] args)
         {
-            MainMenu();
             
+            
+          
+            
+            
+            MainMenu();
             
         }
 
 
         public static void MainMenu()
         {
+            
             int selection = 0;
             
             do

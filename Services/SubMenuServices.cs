@@ -20,6 +20,7 @@ namespace MarketERP.Services
                 Console.WriteLine("6. Qiymət aralığına görə məhsullar");
                 Console.WriteLine("7. Ada görə axtarış");
                 Console.WriteLine("8. Ana səhifəyə qayıt");
+                Console.WriteLine("9.test");
                 
                 Console.WriteLine("Zəhmət olmasa menudan seçim edin");
                 
@@ -53,6 +54,9 @@ namespace MarketERP.Services
                     case 8:
                         Program.MainMenu();
                         break;
+                    case 9:
+                        MenuServices.AddProdtest();
+                        break;
                     default:
                         break;
                 }
@@ -80,7 +84,7 @@ namespace MarketERP.Services
                 
                 string selectionStr = Console.ReadLine();
                 selection = int.Parse(selectionStr);
-
+                
 
                 switch (selection)
                 {

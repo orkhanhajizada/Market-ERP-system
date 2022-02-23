@@ -54,9 +54,34 @@ namespace MarketERP.Services
             product.ProductCategory = category;
             
             Products.Add(product);
+            
+            
 
             return product.No;
 
+        }
+
+        public void AddProd()
+        {
+            Product product = new Product();
+
+            product.Name = "test1";
+            product.Price = 5;
+            product.Quantity = 20;
+            product.Code = "123";
+            product.ProductCategory = Category.Dairy;
+            
+            Products.Add(product);
+            
+            Product product1 = new Product();
+
+            product1.Name = "test2";
+            product1.Price = 3;
+            product1.Quantity = 30;
+            product1.Code = "321";
+            product1.ProductCategory = Category.Dairy;
+            
+            Products.Add(product1);
         }
         
         public int EditProduct(string newName, double newPrice, int newQuantity, string newCode, Category category,string oldCode)
@@ -111,7 +136,8 @@ namespace MarketERP.Services
                 SaleDate = date,
                 TotalPrice = 0
             };
-
+            Sales.Add(sale);
+            
             return sale;
         }
         public int AddSaleItem(Product product,int quantity, double price,Sale sale)
@@ -120,28 +146,36 @@ namespace MarketERP.Services
             if (price <= 0)
                 throw new ArgumentOutOfRangeException("price");
             
-            if (quantity <= 0 && quantity> product.Quantity)
+            if (quantity <= 0 && quantity > product.Quantity)
                 throw new ArgumentOutOfRangeException("quantity");
-            
-            
+
             SaleItem saleItem = new();
 
             saleItem.ProductCode = product;
             saleItem.Quantity = quantity;
             saleItem.Price = price;
-            saleItem.SaleNo = sale;
-            sale.TotalPrice = sale.TotalPrice + (price * quantity) ;
-            product.Quantity = product.Quantity - quantity;
-            
-            
+            saleItem.Sale = sale;
+            sale.TotalPrice +=(price * quantity) ;
+            product.Quantity -= quantity;
+
             SaleItems.Add(saleItem);
+            
 
             return product.No;
         }
+        
+        public void DeleteSale(int no)
+        {
+            
+            int sale = Sales.FindIndex(s => s.No == no);
 
+            if (sale == -1)
+                throw new ArgumentNullException();
 
-
-
+            Sales.RemoveAt(sale);
+        }
+        
+        
         #endregion
     }
 }

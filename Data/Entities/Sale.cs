@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using MarketERP.Data.Common;
 
 namespace MarketERP.Data.Entities
@@ -8,6 +10,8 @@ namespace MarketERP.Data.Entities
         private static int _count = 0;
         public double TotalPrice { get; set; }
         public DateTime SaleDate { get; set; }
+
+        //public ICollection<SaleItem> SaleItems{ get; set; }
 
         public Sale()
         {
