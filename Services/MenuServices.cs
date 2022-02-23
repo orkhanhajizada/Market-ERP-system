@@ -324,7 +324,6 @@ namespace MarketERP.Services
             Console.WriteLine();
         }
 
-
         public static void DisplayProductsByPriceRange()
         {
 
@@ -424,7 +423,6 @@ namespace MarketERP.Services
             }
         }
 
-        
         public static string AddSaletestyn( Sale sale)
         {
             
@@ -448,6 +446,7 @@ namespace MarketERP.Services
 
             return answer;
         }
+        
         public static void AddSaleMenu()
         {
             Sale sale = marketServices.AddSale(DateTime.Now);
@@ -486,7 +485,6 @@ namespace MarketERP.Services
             }*/
         }
 
-
         public static void DisplaySales()
         {
             var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
@@ -511,11 +509,30 @@ namespace MarketERP.Services
             Console.WriteLine();
         }
 
-
+        public static void DeleteSingleSaleItemMenu()
+        {
+            Console.WriteLine("Satışın nömrəsini daxil edin");
+            string no = Console.ReadLine();
+            
+            Console.WriteLine("Məhsulun nömrəsini daxil edin");
+            string saleItemNo = Console.ReadLine();
+            
+            try
+            {
+                marketServices.DeleteSingleSaleItem(int.Parse(no),saleItemNo);
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("Daxil etdiyiniz nömrə üzrə satış tapılmadı");
+                
+            }
+        }
+        
         public static void DeleteSaleMenu()
         {
             Console.WriteLine("Satışın nömrəsini daxil edin");
             string no = Console.ReadLine();
+
 
             try
             {
@@ -529,10 +546,8 @@ namespace MarketERP.Services
 
           
         }
-    
 
-
-#endregion
+        #endregion
 
 }
 }

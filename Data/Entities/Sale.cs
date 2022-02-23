@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using MarketERP.Data.Common;
 
 namespace MarketERP.Data.Entities

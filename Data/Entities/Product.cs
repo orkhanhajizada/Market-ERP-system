@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using MarketERP.Data.Common;
-using MarketERP.Services;
 
 namespace MarketERP.Data.Entities
 {

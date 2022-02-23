@@ -61,7 +61,7 @@ namespace MarketERP.Services
 
         }
 
-        public void AddProd()
+        public void AddProd() //default yaranmasi uchun
         {
             Product product = new Product();
 
@@ -163,11 +163,45 @@ namespace MarketERP.Services
 
             return product.No;
         }
-        
+
+        public void DeleteSingleSaleItem(int no , string saleItemNo)
+        {
+            int sale = Sales.FindIndex(s => s.No == no);
+            
+            if (sale == -1)
+                throw new ArgumentNullException();
+            
+            var saleItems = SaleItems.FindAll(s => s.ProductCode.Code == saleItemNo).ToList();
+            
+            if (saleItems == null)
+                throw new ArgumentNullException();
+
+            foreach (var salesItem in saleItems)
+            {
+                var product = Products.FirstOrDefault(p => p.Code == salesItem.ProductCode.Code);
+
+                product.Quantity += salesItem.Quantity;
+                
+                SaleItems.Remove(salesItem);
+
+            }
+
+            
+        }
         public void DeleteSale(int no)
         {
             
             int sale = Sales.FindIndex(s => s.No == no);
+            
+            var saleItems = SaleItems.Where(s => s.Sale.No == no).ToList();
+
+            foreach (var salesItem in saleItems)
+            {
+                var product = Products.FirstOrDefault(p => p.Code == salesItem.ProductCode.Code);
+
+                product.Quantity += salesItem.Quantity;
+
+            }
 
             if (sale == -1)
                 throw new ArgumentNullException();

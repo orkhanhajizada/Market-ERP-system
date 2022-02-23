@@ -91,11 +91,14 @@ namespace MarketERP.Services
                     case 1:
                         MenuServices.AddSaleMenu();
                         break;
-                    case 4:
-                        MenuServices.DisplaySales();
+                    case 2:
+                        MenuServices.DeleteSingleSaleItemMenu();
                         break;
                     case 3:
-                        Console.WriteLine("sale 3");
+                        MenuServices.DeleteSaleMenu();
+                        break;
+                    case 4:
+                        MenuServices.DisplaySales();
                         break;
                     case 9:
                         Program.MainMenu();

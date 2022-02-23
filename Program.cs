@@ -11,13 +11,8 @@ namespace MarketERP
     {
         static void Main(string[] args)
         {
-            
-            
-          
-            
-            
+         
             MainMenu();
-            
         }
 
 
