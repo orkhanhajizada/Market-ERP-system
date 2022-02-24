@@ -461,18 +461,11 @@ namespace MarketERP.Services
         {
             Sale sale = marketServices.AddSale(DateTime.Now);
 
-            var answer = "";
-            do
-            {
-                AddSaleItemMenu(sale);
-
-
-                 answer = AddSaletestyn(sale);
-                
-
-            } while (answer == "N");
+            AddSaleItemMenu(sale);
+            var answer = AddSaletestyn(sale);
             
             Console.WriteLine("Satış əlavə edildi");
+
             SubMenuServices.DisplaySaleSubMenu();
             
             /*Console.WriteLine("Məhsul əlavə etmək istəyirsinizmi? Y/N");
@@ -598,12 +591,12 @@ namespace MarketERP.Services
         public static void DisplaySalesByDateRange()
         {
 
-            Console.WriteLine("Tarix aralığını daxil edin (dd/MM/yyyy formatı ilə)");
+            Console.WriteLine("Tarix aralığını daxil edin");
 
-            Console.WriteLine("Başlanğıc tarixi (dd/MM/yyyy formatı ilə)");
+            Console.WriteLine("Başlanğıc tarixi (MM.dd.yyyy formatı ilə)");
             DateTime minDate = DateTime.Parse(DateTime.Parse(Console.ReadLine()).ToString("MM.dd.yyyy"));
 
-            Console.WriteLine("Bitmə tarixi");
+            Console.WriteLine("Bitmə tarixi (MM.dd.yyyy formatı ilə)");
             DateTime maxDate = DateTime.Parse(DateTime.Parse(Console.ReadLine()).ToString("MM.dd.yyyy"));
 
             if (minDate > maxDate)
@@ -669,7 +662,61 @@ namespace MarketERP.Services
             table.Write();
             Console.WriteLine();
         }
+
+        public static void DisplaySalesByDate()
+        {
+
+            Console.WriteLine("Tarixi  daxil edin (MM.dd.yyyy formatı ilə)");
+            
+            DateTime date = DateTime.Parse(DateTime.Parse(Console.ReadLine()).ToString("MM.dd.yyyy"));
+
+            var saleByDate =
+                marketServices.Sales.Where(s => s.SaleDate.Date == date).ToList();
+
+            if (saleByDate.Count <= 0)
+            {
+                Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
+                SubMenuServices.DisplaySaleSubMenu();
+            }
+
+            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
+
+            foreach (var sale in saleByDate)
+            {
+                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
+                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
+            }
+
+            table.Write();
+            Console.WriteLine();
+        }
         
+        public static void DisplaySaleById()
+        {
+
+            Console.WriteLine("Satış nömrəsini daxil edin");
+            
+             int no = Int32.Parse(Console.ReadLine());
+
+             var saleById =
+                 marketServices.Sales.FirstOrDefault(s => s.No == no);
+
+             if (saleById == null)
+             {
+                 Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
+                 SubMenuServices.DisplaySaleSubMenu();
+             }
+
+             var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
+
+             
+             table.AddRow(saleById.No, saleById.TotalPrice, saleById.SaleDate,
+                     marketServices.SaleItems.Where(s => s.Sale.No == saleById.No).Sum(s => s.Quantity));
+             
+
+             table.Write();
+             Console.WriteLine();
+        }
 
         #endregion
 
