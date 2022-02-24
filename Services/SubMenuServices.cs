@@ -62,7 +62,7 @@ namespace MarketERP.Services
                 }
                 
             } while (selection != 8);
-        }
+        } //Products sub menu
 
         public static void DisplaySaleSubMenu()
         {
@@ -120,7 +120,7 @@ namespace MarketERP.Services
                 }
                 
             }while (selection != 9);
-        }
+        }  //Sales sub menu
         
     }
 }

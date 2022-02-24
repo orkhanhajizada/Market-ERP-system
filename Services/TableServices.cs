@@ -22,7 +22,7 @@ namespace MarketERP.Services{
 
             table.Write();
             Console.WriteLine();
-        }
+        }  //generate table for products
         
         public  void TableForSaleList(List<Sale> sales, List<SaleItem> saleItems)
         {
@@ -38,7 +38,7 @@ namespace MarketERP.Services{
             table.Write();
             Console.WriteLine();
             
-        }
+        } //generate table for sales
         
     }
 }

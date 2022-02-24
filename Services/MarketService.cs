@@ -58,9 +58,9 @@ namespace MarketERP.Services
 
             return product.No;
 
-        }
+        }  //Add product method
 
-        public void AddProd() //default yaranmasi uchun
+        public void AddProd() //Add default products for test 
         {
             Product product = new Product();
 
@@ -81,7 +81,7 @@ namespace MarketERP.Services
             product1.ProductCategory = Category.Dairy;
             
             Products.Add(product1);
-        }
+        } 
         
         public int EditProduct(string newName, double newPrice, int newQuantity, string newCode, Category category,string oldCode)
         {
@@ -110,7 +110,7 @@ namespace MarketERP.Services
 
 
 
-        }
+        } //Edit selected product method
         
         public void DeleteProduct(string code)
         {
@@ -121,7 +121,7 @@ namespace MarketERP.Services
                 throw new ArgumentNullException();
 
             Products.Remove(product);
-        }
+        } //Delete selected product method
           
         #endregion
 
@@ -138,7 +138,7 @@ namespace MarketERP.Services
             Sales.Add(sale);
             
             return sale;
-        }
+        } //Add sale method
         
         public int AddSaleItem(Product product,int quantity, double price,Sale sale)
         {
@@ -162,7 +162,7 @@ namespace MarketERP.Services
             
 
             return product.No;
-        }
+        } //Add sale item to sale method
 
         public void DeleteSingleSaleItem(int no , string saleItemNo)
         {
@@ -189,7 +189,7 @@ namespace MarketERP.Services
             }
 
             
-        }
+        } //Delete selected sale item from sale  method
         
         public void DeleteSale(int no)
         {
@@ -210,7 +210,7 @@ namespace MarketERP.Services
                 throw new ArgumentNullException();
 
             Sales.RemoveAt(sale);
-        }
+        } //Delete selected sale method
         
         
         #endregion

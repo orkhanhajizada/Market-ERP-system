@@ -7,7 +7,7 @@ using MarketERP.Data;
 
 namespace MarketERP.Services
 {
-    public static class MenuServices
+    public static class MenuServices  
     {
         private static MarketService marketServices = new MarketService();
 
@@ -15,7 +15,7 @@ namespace MarketERP.Services
 
         #region Products
 
-        public static void AddProductMenu()
+        public static void AddProductMenu() //Add product menu method
         {
             Console.WriteLine("Məhsulun adını daxil edin");
             string name = Console.ReadLine();
@@ -31,7 +31,7 @@ namespace MarketERP.Services
 
             Console.WriteLine("Məhsulun kategoriyasını daxil edin");
 
-
+            //Select category from enum list
             Category category;
 
             Console.WriteLine("1. Alkoqollu içkilər");
@@ -78,7 +78,7 @@ namespace MarketERP.Services
 
             try
             {
-                marketServices.AddProduct(name, double.Parse(price), int.Parse(quantity), code, category);
+                marketServices.AddProduct(name, double.Parse(price), int.Parse(quantity), code, category); //send product properties add product method as parameter
                 Console.WriteLine("Məhsul əlavə edildi");
 
             }
@@ -97,16 +97,16 @@ namespace MarketERP.Services
                 Console.WriteLine("Bu kodda məhsul var artıq");
                 Console.WriteLine(e.Message);
             }
-        }
+        } 
 
-        public static void EditProductMenu()
+        public static void EditProductMenu() //Edit product menu method 
         {
             Console.WriteLine("Məhsulun kodunu daxil edin");
             string oldCode = Console.ReadLine();
 
             List<Product> products = marketServices.Products.Where(p => p.Code == oldCode).ToList();
 
-            tableServices.TableForProductList(products);
+            tableServices.TableForProductList(products); //send product as parameter for generate table products
 
             Console.WriteLine("Məhsulun adını daxil edin");
             string newName = Console.ReadLine();
@@ -122,7 +122,7 @@ namespace MarketERP.Services
 
             Console.WriteLine("Məhsulun kategoriyasını daxil edin");
 
-
+            //select category from enum list
             Category category;
 
             Console.WriteLine("1. Alkoqollu içkilər");
@@ -169,8 +169,7 @@ namespace MarketERP.Services
 
             try
             {
-                marketServices.EditProduct(newName, double.Parse(newPrice), int.Parse(newQuantity), newCode, category,
-                    oldCode);
+                marketServices.EditProduct(newName, double.Parse(newPrice), int.Parse(newQuantity), newCode, category, oldCode); //send product properties to edit method as parameter
                 Console.WriteLine("Məhsul redakte edildi");
 
             }
@@ -180,9 +179,9 @@ namespace MarketERP.Services
                 Console.WriteLine(e.Message);
             }
             
-        }
+        } 
 
-        public static void DeleteProductMenu()
+        public static void DeleteProductMenu() //Delete selected product menu method 
         {
             Console.WriteLine("Silmək istədiyiniz məhsulun kodunu yazın");
             string code = Console.ReadLine();
@@ -195,7 +194,7 @@ namespace MarketERP.Services
                 SubMenuServices.DisplayProductSubMenu();
             }
             
-            tableServices.TableForProductList(products);
+            tableServices.TableForProductList(products); //send product as parameter for generate table products
 
             Console.WriteLine("Məhsulu silmək istədiyinizdən əminsinizmi? Y/N/Exit");
             string answer = Console.ReadLine()?.ToUpper();
@@ -204,7 +203,7 @@ namespace MarketERP.Services
             {
                 try
                 {
-                    marketServices.DeleteProduct(products.FirstOrDefault(p=>p.Code == code).Code);
+                    marketServices.DeleteProduct(products.FirstOrDefault(p=>p.Code == code).Code); //send product to delete method as parameter
                     Console.WriteLine("Məhsul silindi");
 
                 }
@@ -223,17 +222,18 @@ namespace MarketERP.Services
                 SubMenuServices.DisplayProductSubMenu();
             }
 
-        }
+        } 
 
-        public static void DisplayProducts()
+        public static void DisplayProducts() //All products list menu method 
         {
-            tableServices.TableForProductList(marketServices.Products);
-        }
+            tableServices.TableForProductList(marketServices.Products); //send product as parameter for generate table products
+        } 
 
-        public static void DisplayProductsByCategory()
+        public static void DisplayProductsByCategory() //Filter by category product list menu method 
         {
             Console.WriteLine("Məhsulun kategoriyasını daxil edin");
 
+            //select category for filter
             Category category;
 
             Console.WriteLine("1. Alkoqollu içkilər");
@@ -280,11 +280,11 @@ namespace MarketERP.Services
 
             List<Product> products = marketServices.Products.FindAll(p => p.ProductCategory == category);
 
-            tableServices.TableForProductList(products);
+            tableServices.TableForProductList(products); //send product as parameter for generate table products
             
-        }
+        } 
 
-        public static void DisplayProductsByPriceRange()
+        public static void DisplayProductsByPriceRange() //Filter by price range product list menu method
         {
             Console.WriteLine("Qiymet aralığını daxil edin");
 
@@ -308,11 +308,11 @@ namespace MarketERP.Services
                 SubMenuServices.DisplayProductSubMenu();
             }
             
-            tableServices.TableForProductList(products);
+            tableServices.TableForProductList(products); //send product as parameter for generate table products
             
-        }
+        } 
 
-        public static void DisplayProductsByName()
+        public static void DisplayProductsByName() // Filter by product name product list menu method 
         {
             Console.WriteLine("Məhsulun adını daxil edin");
             string name = Console.ReadLine();
@@ -326,21 +326,21 @@ namespace MarketERP.Services
                 SubMenuServices.DisplayProductSubMenu();
             }
             
-            tableServices.TableForProductList(products);
+            tableServices.TableForProductList(products); //send product as parameter for generate table products
 
-        }
+        } 
 
-        public static void AddProdtest()
+        public static void AddProdtest() // add default products for test 
         {
             marketServices.AddProd();
-        }
+        } 
 
         #endregion
 
 
         #region Sale
 
-        public static void AddSaleItemMenu(Sale sale)
+        public static void AddSaleItemMenu(Sale sale) //Add sale item menu method 
         {
             Console.WriteLine("Məhsulun kodunu daxil edin");
             string code = Console.ReadLine();
@@ -368,9 +368,9 @@ namespace MarketERP.Services
                 Console.WriteLine("Məhsulun sayı və ya qiyməti düzgün deyil");
                 throw;
             }
-        }
+        } 
 
-        public static string AddOtherSaleitem( Sale sale)
+        public static string AddOtherSaleitem( Sale sale) //Add multiple sale item menu method 
         {
             
             Console.WriteLine("Məhsul əlavə etmək istəyirsinizmi? Y/N");
@@ -392,14 +392,14 @@ namespace MarketERP.Services
             }
 
             return answer;
-        }
+        } 
         
-        public static void AddSaleMenu()
+        public static void AddSaleMenu() //Add  sale  menu method 
         {
-            Sale sale = marketServices.AddSale(DateTime.Now);
+            Sale sale = marketServices.AddSale(DateTime.Now); //Send date as parameter to add sale method
 
-            AddSaleItemMenu(sale);
-            var answer = AddOtherSaleitem(sale);
+            AddSaleItemMenu(sale); //send sale to add sale item menu
+            var answer = AddOtherSaleitem(sale); 
             
             Console.WriteLine("Satış əlavə edildi");
 
@@ -407,21 +407,21 @@ namespace MarketERP.Services
             
         }
 
-        public static void DeleteSingleSaleItemMenu()
+        public static void DeleteSingleSaleItemMenu() //Delete single sale item menu method 
         {
-            tableServices.TableForSaleList(marketServices.Sales , marketServices.SaleItems);
+            tableServices.TableForSaleList(marketServices.Sales , marketServices.SaleItems); //send sales as parameter for generate table sale
 
             Console.WriteLine("Satışın nömrəsini daxil edin");
             string no = Console.ReadLine();
             
-            tableServices.TableForProductList(marketServices.Products);
+            tableServices.TableForProductList(marketServices.Products); //send products as parameter for generate table product
 
             Console.WriteLine("Məhsulun nömrəsini daxil edin");
             string saleItemNo = Console.ReadLine();
             
             try
             {
-                marketServices.DeleteSingleSaleItem(int.Parse(no),saleItemNo);
+                marketServices.DeleteSingleSaleItem(int.Parse(no),saleItemNo); //send sale no and sale item no as parameter to delete selected sale item from sale  method
                 Console.WriteLine("Məhsul uğurla satışdan silindi");
             }
             catch (ArgumentNullException e)
@@ -429,18 +429,18 @@ namespace MarketERP.Services
                 Console.WriteLine("Daxil etdiyiniz nömrə üzrə satış tapılmadı");
                 
             }
-        }
+        } 
         
-        public static void DeleteSaleMenu()
+        public static void DeleteSaleMenu() //Delete selected sale menu method 
         {
-            tableServices.TableForSaleList(marketServices.Sales,marketServices.SaleItems);
+            tableServices.TableForSaleList(marketServices.Sales,marketServices.SaleItems);  //send sales as parameter for generate table sale
 
             Console.WriteLine("Satışın nömrəsini daxil edin");
             string no = Console.ReadLine();
             
             try
             {
-                marketServices.DeleteSale(int.Parse(no));
+                marketServices.DeleteSale(int.Parse(no)); // send sale no as parameter to delete sale method
                 Console.WriteLine("Satış uğurla silindi");
             }
             catch (ArgumentNullException e)
@@ -449,14 +449,14 @@ namespace MarketERP.Services
                 
             }
             
-        }
+        } 
         
-        public static void DisplaySales()
+        public static void DisplaySales() // All sales list menu method 
         {
-            tableServices.TableForSaleList(marketServices.Sales,marketServices.SaleItems);
-        }
+            tableServices.TableForSaleList(marketServices.Sales,marketServices.SaleItems); //send sales as parameter for generate table sale
+        } 
         
-        public static void DisplaySalesByDateRange()
+        public static void DisplaySalesByDateRange() // Filter by date range sales list menu method 
         {
 
             Console.WriteLine("Tarix aralığını daxil edin");
@@ -481,11 +481,11 @@ namespace MarketERP.Services
                 SubMenuServices.DisplaySaleSubMenu();
             }
 
-            tableServices.TableForSaleList(sales,marketServices.SaleItems);
+            tableServices.TableForSaleList(sales,marketServices.SaleItems); //send sales as parameter for generate table sale
             
-        }
+        } 
         
-        public static void DisplaySalesByPriceRange()
+        public static void DisplaySalesByPriceRange() // Filter by price range sales list menu method 
         {
             Console.WriteLine("Qiymet aralığını daxil edin");
 
@@ -508,11 +508,11 @@ namespace MarketERP.Services
                 Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
                 SubMenuServices.DisplaySaleSubMenu();
             }
-            tableServices.TableForSaleList(sales,marketServices.SaleItems);
+            tableServices.TableForSaleList(sales,marketServices.SaleItems); //send sales as parameter for generate table sale
             
-        }
+        } 
 
-        public static void DisplaySalesByDate()
+        public static void DisplaySalesByDate() // Filter by date  sales list menu method 
         {
 
             Console.WriteLine("Tarixi  daxil edin (MM.dd.yyyy formatı ilə)");
@@ -527,11 +527,11 @@ namespace MarketERP.Services
                 Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
                 SubMenuServices.DisplaySaleSubMenu();
             }
-            tableServices.TableForSaleList(sales, marketServices.SaleItems);
+            tableServices.TableForSaleList(sales, marketServices.SaleItems); //send sales as parameter for generate table sale
             
-        }
+        } 
         
-        public static void DisplaySaleById()
+        public static void DisplaySaleById() // Filter by saleNo  sale menu method 
         {
 
             Console.WriteLine("Satış nömrəsini daxil edin");
@@ -548,9 +548,9 @@ namespace MarketERP.Services
                  SubMenuServices.DisplaySaleSubMenu();
              }
 
-             tableServices.TableForSaleList(sales,marketServices.SaleItems);
+             tableServices.TableForSaleList(sales,marketServices.SaleItems);  //send sales as parameter for generate table sale
              
-        }
+        } 
 
         #endregion
 
