@@ -11,6 +11,7 @@ namespace MarketERP.Services
     {
         private static MarketService marketServices = new MarketService();
 
+        private static TableServices tableServices = new TableServices();
 
         #region Products
 
@@ -103,17 +104,9 @@ namespace MarketERP.Services
             Console.WriteLine("Məhsulun kodunu daxil edin");
             string oldCode = Console.ReadLine();
 
-            var table = new ConsoleTable("No", "Ad", "Qiymət", "Say", "Cəm Qiymət", "Kod", "Kategoriya");
+            List<Product> products = marketServices.Products.Where(p => p.Code == oldCode).ToList();
 
-
-            Product products = marketServices.Products.FirstOrDefault(p => p.Code == oldCode);
-
-            table.AddRow(products.No, products.Name, products.Price.ToString("#.00"), products.Quantity,
-                (products.Price * products.Quantity).ToString("#.00"), products.Code, products.ProductCategory);
-
-            table.Write();
-            Console.WriteLine();
-
+            tableServices.TableForProductList(products);
 
             Console.WriteLine("Məhsulun adını daxil edin");
             string newName = Console.ReadLine();
@@ -186,8 +179,7 @@ namespace MarketERP.Services
                 Console.WriteLine("Yenidən cəhd edin");
                 Console.WriteLine(e.Message);
             }
-
-
+            
         }
 
         public static void DeleteProductMenu()
@@ -195,23 +187,15 @@ namespace MarketERP.Services
             Console.WriteLine("Silmək istədiyiniz məhsulun kodunu yazın");
             string code = Console.ReadLine();
 
+            List<Product> products = marketServices.Products.Where(p => p.Code == code).ToList();
 
-            Product product = marketServices.Products.FirstOrDefault(p => p.Code == code);
-
-            if (product == null)
+            if (products.Count == 0)
             {
                 Console.WriteLine("Axtardığınız məhsul tapılmadı");
                 SubMenuServices.DisplayProductSubMenu();
             }
-
-
-            var table = new ConsoleTable("No", "Ad", "Qiymət", "Say", "Cəm Qiymət", "Kod", "Kategoriya");
-
-            table.AddRow(product.No, product.Name, product.Price.ToString("#.00"), product.Quantity,
-                (product.Price * product.Quantity).ToString("#.00"), product.Code, product.ProductCategory);
-
-            table.Write();
-            Console.WriteLine();
+            
+            tableServices.TableForProductList(products);
 
             Console.WriteLine("Məhsulu silmək istədiyinizdən əminsinizmi? Y/N/Exit");
             string answer = Console.ReadLine()?.ToUpper();
@@ -220,7 +204,7 @@ namespace MarketERP.Services
             {
                 try
                 {
-                    marketServices.DeleteProduct(product.Code);
+                    marketServices.DeleteProduct(products.FirstOrDefault(p=>p.Code == code).Code);
                     Console.WriteLine("Məhsul silindi");
 
                 }
@@ -239,28 +223,15 @@ namespace MarketERP.Services
                 SubMenuServices.DisplayProductSubMenu();
             }
 
-
         }
 
         public static void DisplayProducts()
         {
-            var table = new ConsoleTable("No", "Ad", "Qiymət", "Say", "Cəm Qiymət", "Kod", "Kategoriya");
-
-            foreach (var products in marketServices.Products)
-            {
-                table.AddRow(products.No, products.Name, products.Price.ToString("#.00"), products.Quantity,
-                    (products.Price * products.Quantity).ToString("#.00"), products.Code, products.ProductCategory);
-
-            }
-
-            table.Write();
-            Console.WriteLine();
+            tableServices.TableForProductList(marketServices.Products);
         }
 
         public static void DisplayProductsByCategory()
         {
-
-
             Console.WriteLine("Məhsulun kategoriyasını daxil edin");
 
             Category category;
@@ -307,27 +278,14 @@ namespace MarketERP.Services
                     break;
             }
 
+            List<Product> products = marketServices.Products.FindAll(p => p.ProductCategory == category);
 
-            List<Product> productsByCategory = marketServices.Products.FindAll(p => p.ProductCategory == category);
-
-
-            var table = new ConsoleTable("No", "Ad", "Qiymət", "Say", "Cəm Qiymət", "Kod", "Kategoriya");
-
-            foreach (var products in productsByCategory)
-            {
-                table.AddRow(products.No, products.Name, products.Price.ToString("#.00"), products.Quantity,
-                    (products.Price * products.Quantity).ToString("#.00"), products.Code, products.ProductCategory);
-
-            }
-
-            table.Write();
-            Console.WriteLine();
+            tableServices.TableForProductList(products);
+            
         }
 
         public static void DisplayProductsByPriceRange()
         {
-
-
             Console.WriteLine("Qiymet aralığını daxil edin");
 
             Console.WriteLine("Minimum məbləğ");
@@ -341,56 +299,35 @@ namespace MarketERP.Services
                 Console.WriteLine("Məbləğ aralığı düzgün deyil");
             }
 
-            List<Product> productsByPrice =
+            List<Product> products =
                 marketServices.Products.FindAll(p => p.Price >= minPrice && p.Price <= maxPrice);
 
-            if (productsByPrice.Count <= 0)
+            if (products.Count <= 0)
             {
                 Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
                 SubMenuServices.DisplayProductSubMenu();
             }
-
-            var table = new ConsoleTable("No", "Ad", "Qiymət", "Say", "Cəm Qiymət", "Kod", "Kategoriya");
-
-            foreach (var products in productsByPrice)
-            {
-                table.AddRow(products.No, products.Name, products.Price.ToString("#.00"), products.Quantity,
-                    (products.Price * products.Quantity).ToString("#.00"), products.Code, products.ProductCategory);
-
-            }
-
-            table.Write();
-            Console.WriteLine();
+            
+            tableServices.TableForProductList(products);
+            
         }
 
         public static void DisplayProductsByName()
         {
-
-
             Console.WriteLine("Məhsulun adını daxil edin");
             string name = Console.ReadLine();
 
-
-            List<Product> productsByName =
+            List<Product> products =
                 marketServices.Products.FindAll(p => p.Name.ToLower().Contains(name.ToLower()));
 
-            if (productsByName.Count <= 0)
+            if (products.Count <= 0)
             {
                 Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
                 SubMenuServices.DisplayProductSubMenu();
             }
+            
+            tableServices.TableForProductList(products);
 
-            var table = new ConsoleTable("No", "Ad", "Qiymət", "Say", "Cəm Qiymət", "Kod", "Kategoriya");
-
-            foreach (var products in productsByName)
-            {
-                table.AddRow(products.No, products.Name, products.Price.ToString("#.00"), products.Quantity,
-                    (products.Price * products.Quantity).ToString("#.00"), products.Code, products.ProductCategory);
-
-            }
-
-            table.Write();
-            Console.WriteLine();
         }
 
         public static void AddProdtest()
@@ -433,7 +370,7 @@ namespace MarketERP.Services
             }
         }
 
-        public static string AddSaletestyn( Sale sale)
+        public static string AddOtherSaleitem( Sale sale)
         {
             
             Console.WriteLine("Məhsul əlavə etmək istəyirsinizmi? Y/N");
@@ -442,7 +379,7 @@ namespace MarketERP.Services
             if (answer == "Y")
             {
                 AddSaleItemMenu(sale);
-                AddSaletestyn(sale);
+                AddOtherSaleitem(sale);
             }
             else if (answer == "N")
             {
@@ -451,7 +388,7 @@ namespace MarketERP.Services
             else
             {
                 Console.WriteLine("Seçiminiz düzgün deyil");
-                AddSaletestyn(sale);
+                AddOtherSaleitem(sale);
             }
 
             return answer;
@@ -462,87 +399,23 @@ namespace MarketERP.Services
             Sale sale = marketServices.AddSale(DateTime.Now);
 
             AddSaleItemMenu(sale);
-            var answer = AddSaletestyn(sale);
+            var answer = AddOtherSaleitem(sale);
             
             Console.WriteLine("Satış əlavə edildi");
 
             SubMenuServices.DisplaySaleSubMenu();
             
-            /*Console.WriteLine("Məhsul əlavə etmək istəyirsinizmi? Y/N");
-            
-            string answer = Console.ReadLine()?.ToUpper();
-
-            if (answer == "Y")
-            {
-                AddSaleMenu();
-            }
-            else if (answer == "N")
-            {
-                Console.WriteLine("Satış əlavə edildi");
-                SubMenuServices.DisplaySaleSubMenu();
-            }
-            else
-            {
-                Console.WriteLine("Seçiminiz düzgün deyil");
-                AddSaleMenu();
-            }*/
-        }
-
-        public static void DisplaySales()
-        {
-            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
-
-            // var datagrouplist = marketServices.SaleItems.GroupBy(s => s.Sale.No);
-            //
-            // foreach (var salegroup in datagrouplist)
-            // {
-            //     
-            //     table.AddRow(salegroup.FirstOrDefault().Sale.No, salegroup.FirstOrDefault().Sale.TotalPrice, salegroup.FirstOrDefault().Sale.SaleDate, salegroup.Sum(s => s.Quantity));
-            //     
-            //
-            // }
-
-            foreach (var sale in marketServices.Sales)
-            {
-                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
-                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
-            }
-
-            table.Write();
-            Console.WriteLine();
         }
 
         public static void DeleteSingleSaleItemMenu()
         {
-            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
-            
+            tableServices.TableForSaleList(marketServices.Sales , marketServices.SaleItems);
 
-            foreach (var sale in marketServices.Sales)
-            {
-                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
-                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
-            }
-
-            table.Write();
-            Console.WriteLine();
-            
             Console.WriteLine("Satışın nömrəsini daxil edin");
             string no = Console.ReadLine();
             
-            
-            var tableProduct = new ConsoleTable("No", "Ad", "Qiymət", "Say", "Cəm Qiymət", "Kod", "Kategoriya");
+            tableServices.TableForProductList(marketServices.Products);
 
-            foreach (var products in marketServices.Products)
-            {
-                tableProduct.AddRow(products.No, products.Name, products.Price.ToString("#.00"), products.Quantity,
-                    (products.Price * products.Quantity).ToString("#.00"), products.Code, products.ProductCategory);
-
-            }
-
-            tableProduct.Write();
-            Console.WriteLine();
-            
-            
             Console.WriteLine("Məhsulun nömrəsini daxil edin");
             string saleItemNo = Console.ReadLine();
             
@@ -560,20 +433,11 @@ namespace MarketERP.Services
         
         public static void DeleteSaleMenu()
         {
-            
-            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
-            
-
-            foreach (var sale in marketServices.Sales)
-            {
-                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
-                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
-            }
+            tableServices.TableForSaleList(marketServices.Sales,marketServices.SaleItems);
 
             Console.WriteLine("Satışın nömrəsini daxil edin");
             string no = Console.ReadLine();
-
-
+            
             try
             {
                 marketServices.DeleteSale(int.Parse(no));
@@ -584,8 +448,12 @@ namespace MarketERP.Services
                 Console.WriteLine("Daxil etdiyiniz nömrə üzrə satış tapılmadı");
                 
             }
-
-          
+            
+        }
+        
+        public static void DisplaySales()
+        {
+            tableServices.TableForSaleList(marketServices.Sales,marketServices.SaleItems);
         }
         
         public static void DisplaySalesByDateRange()
@@ -604,31 +472,21 @@ namespace MarketERP.Services
                 Console.WriteLine("Tarix aralığı düzgün deyil");
             }
             
-            var saleByDate =
+            var sales =
                 marketServices.Sales.Where(s => s.SaleDate >= minDate && s.SaleDate <= maxDate).ToList();
 
-            if (saleByDate.Count <= 0)
+            if (sales.Count <= 0)
             {
                 Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
                 SubMenuServices.DisplaySaleSubMenu();
             }
 
-            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
-
-            foreach (var sale in saleByDate)
-            {
-                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
-                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
-            }
-
-            table.Write();
-            Console.WriteLine();
+            tableServices.TableForSaleList(sales,marketServices.SaleItems);
+            
         }
         
         public static void DisplaySalesByPriceRange()
         {
-
-
             Console.WriteLine("Qiymet aralığını daxil edin");
 
             Console.WriteLine("Minimum məbləğ");
@@ -642,25 +500,16 @@ namespace MarketERP.Services
                 Console.WriteLine("Məbləğ aralığı düzgün deyil");
             }
 
-            var saleByPrice =
+            var sales =
                 marketServices.Sales.Where(s => s.TotalPrice >= minPrice && s.TotalPrice <= maxPrice).ToList();
 
-            if (saleByPrice.Count <= 0)
+            if (sales.Count <= 0)
             {
                 Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
                 SubMenuServices.DisplaySaleSubMenu();
             }
-
-            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
-
-            foreach (var sale in saleByPrice)
-            {
-                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
-                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
-            }
-
-            table.Write();
-            Console.WriteLine();
+            tableServices.TableForSaleList(sales,marketServices.SaleItems);
+            
         }
 
         public static void DisplaySalesByDate()
@@ -670,25 +519,16 @@ namespace MarketERP.Services
             
             DateTime date = DateTime.Parse(DateTime.Parse(Console.ReadLine()).ToString("MM.dd.yyyy"));
 
-            var saleByDate =
+            var sales =
                 marketServices.Sales.Where(s => s.SaleDate.Date == date).ToList();
 
-            if (saleByDate.Count <= 0)
+            if (sales.Count <= 0)
             {
                 Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
                 SubMenuServices.DisplaySaleSubMenu();
             }
-
-            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
-
-            foreach (var sale in saleByDate)
-            {
-                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
-                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
-            }
-
-            table.Write();
-            Console.WriteLine();
+            tableServices.TableForSaleList(sales, marketServices.SaleItems);
+            
         }
         
         public static void DisplaySaleById()
@@ -698,24 +538,18 @@ namespace MarketERP.Services
             
              int no = Int32.Parse(Console.ReadLine());
 
-             var saleById =
-                 marketServices.Sales.FirstOrDefault(s => s.No == no);
+             var sales =
+                 marketServices.Sales.Where(s => s.No == no).ToList();
 
-             if (saleById == null)
+
+             if (sales.Count == 0)
              {
                  Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
                  SubMenuServices.DisplaySaleSubMenu();
              }
 
-             var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
-
+             tableServices.TableForSaleList(sales,marketServices.SaleItems);
              
-             table.AddRow(saleById.No, saleById.TotalPrice, saleById.SaleDate,
-                     marketServices.SaleItems.Where(s => s.Sale.No == saleById.No).Sum(s => s.Quantity));
-             
-
-             table.Write();
-             Console.WriteLine();
         }
 
         #endregion
