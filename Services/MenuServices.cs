@@ -511,8 +511,34 @@ namespace MarketERP.Services
 
         public static void DeleteSingleSaleItemMenu()
         {
+            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
+            
+
+            foreach (var sale in marketServices.Sales)
+            {
+                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
+                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
+            }
+
+            table.Write();
+            Console.WriteLine();
+            
             Console.WriteLine("Satışın nömrəsini daxil edin");
             string no = Console.ReadLine();
+            
+            
+            var tableProduct = new ConsoleTable("No", "Ad", "Qiymət", "Say", "Cəm Qiymət", "Kod", "Kategoriya");
+
+            foreach (var products in marketServices.Products)
+            {
+                tableProduct.AddRow(products.No, products.Name, products.Price.ToString("#.00"), products.Quantity,
+                    (products.Price * products.Quantity).ToString("#.00"), products.Code, products.ProductCategory);
+
+            }
+
+            tableProduct.Write();
+            Console.WriteLine();
+            
             
             Console.WriteLine("Məhsulun nömrəsini daxil edin");
             string saleItemNo = Console.ReadLine();
@@ -520,6 +546,7 @@ namespace MarketERP.Services
             try
             {
                 marketServices.DeleteSingleSaleItem(int.Parse(no),saleItemNo);
+                Console.WriteLine("Məhsul uğurla satışdan silindi");
             }
             catch (ArgumentNullException e)
             {
@@ -530,6 +557,16 @@ namespace MarketERP.Services
         
         public static void DeleteSaleMenu()
         {
+            
+            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
+            
+
+            foreach (var sale in marketServices.Sales)
+            {
+                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
+                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
+            }
+
             Console.WriteLine("Satışın nömrəsini daxil edin");
             string no = Console.ReadLine();
 
@@ -537,6 +574,7 @@ namespace MarketERP.Services
             try
             {
                 marketServices.DeleteSale(int.Parse(no));
+                Console.WriteLine("Satış uğurla silindi");
             }
             catch (ArgumentNullException e)
             {

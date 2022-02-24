@@ -140,6 +140,7 @@ namespace MarketERP.Services
             
             return sale;
         }
+        
         public int AddSaleItem(Product product,int quantity, double price,Sale sale)
         {
             
@@ -166,12 +167,12 @@ namespace MarketERP.Services
 
         public void DeleteSingleSaleItem(int no , string saleItemNo)
         {
-            int sale = Sales.FindIndex(s => s.No == no);
+            var sale = Sales.FirstOrDefault(s => s.No == no);
             
-            if (sale == -1)
+            if (sale == null)
                 throw new ArgumentNullException();
             
-            var saleItems = SaleItems.FindAll(s => s.ProductCode.Code == saleItemNo).ToList();
+            var saleItems = SaleItems.FindAll(s =>s.Sale.No == sale.No && s.ProductCode.Code == saleItemNo).ToList();
             
             if (saleItems == null)
                 throw new ArgumentNullException();
@@ -181,6 +182,8 @@ namespace MarketERP.Services
                 var product = Products.FirstOrDefault(p => p.Code == salesItem.ProductCode.Code);
 
                 product.Quantity += salesItem.Quantity;
+
+                sale.TotalPrice -= salesItem.Price * salesItem.Quantity;
                 
                 SaleItems.Remove(salesItem);
 
@@ -188,6 +191,7 @@ namespace MarketERP.Services
 
             
         }
+        
         public void DeleteSale(int no)
         {
             
