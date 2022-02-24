@@ -328,14 +328,18 @@ namespace MarketERP.Services
         {
 
 
-            Console.WriteLine("Qiymet aralıöını daxil edin");
+            Console.WriteLine("Qiymet aralığını daxil edin");
 
             Console.WriteLine("Minimum məbləğ");
             double minPrice = double.Parse(Console.ReadLine());
 
             Console.WriteLine("Maksimum məbləğ");
             double maxPrice = double.Parse(Console.ReadLine());
-
+            
+            if (minPrice > maxPrice)
+            {
+                Console.WriteLine("Məbləğ aralığı düzgün deyil");
+            }
 
             List<Product> productsByPrice =
                 marketServices.Products.FindAll(p => p.Price >= minPrice && p.Price <= maxPrice);
@@ -405,6 +409,12 @@ namespace MarketERP.Services
             string code = Console.ReadLine();
 
             Product product = marketServices.Products.FirstOrDefault(p => p.Code == code);
+
+            if (product == null)
+            {
+                Console.WriteLine("Məhsulun kodu düzgün deyil");
+                AddSaleItemMenu(sale);
+            }
 
             Console.WriteLine("Məhsulun sayını daxil edin");
             int quantity = Int32.Parse(Console.ReadLine());
@@ -584,6 +594,82 @@ namespace MarketERP.Services
 
           
         }
+        
+        public static void DisplaySalesByDateRange()
+        {
+
+            Console.WriteLine("Tarix aralığını daxil edin (dd/MM/yyyy formatı ilə)");
+
+            Console.WriteLine("Başlanğıc tarixi (dd/MM/yyyy formatı ilə)");
+            DateTime minDate = DateTime.Parse(DateTime.Parse(Console.ReadLine()).ToString("MM.dd.yyyy"));
+
+            Console.WriteLine("Bitmə tarixi");
+            DateTime maxDate = DateTime.Parse(DateTime.Parse(Console.ReadLine()).ToString("MM.dd.yyyy"));
+
+            if (minDate > maxDate)
+            {
+                Console.WriteLine("Tarix aralığı düzgün deyil");
+            }
+            
+            var saleByDate =
+                marketServices.Sales.Where(s => s.SaleDate >= minDate && s.SaleDate <= maxDate).ToList();
+
+            if (saleByDate.Count <= 0)
+            {
+                Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
+                SubMenuServices.DisplaySaleSubMenu();
+            }
+
+            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
+
+            foreach (var sale in saleByDate)
+            {
+                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
+                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
+            }
+
+            table.Write();
+            Console.WriteLine();
+        }
+        
+        public static void DisplaySalesByPriceRange()
+        {
+
+
+            Console.WriteLine("Qiymet aralığını daxil edin");
+
+            Console.WriteLine("Minimum məbləğ");
+            double minPrice = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("Maksimum məbləğ");
+            double maxPrice = double.Parse(Console.ReadLine());
+
+            if (minPrice > maxPrice)
+            {
+                Console.WriteLine("Məbləğ aralığı düzgün deyil");
+            }
+
+            var saleByPrice =
+                marketServices.Sales.Where(s => s.TotalPrice >= minPrice && s.TotalPrice <= maxPrice).ToList();
+
+            if (saleByPrice.Count <= 0)
+            {
+                Console.WriteLine("Axtarışa uyğun nəticə tapılmadı");
+                SubMenuServices.DisplaySaleSubMenu();
+            }
+
+            var table = new ConsoleTable("No", "Məbləğ", "Tarix", "Məhsulun sayı");
+
+            foreach (var sale in saleByPrice)
+            {
+                table.AddRow(sale.No, sale.TotalPrice, sale.SaleDate,
+                    marketServices.SaleItems.Where(s => s.Sale.No == sale.No).Sum(s => s.Quantity));
+            }
+
+            table.Write();
+            Console.WriteLine();
+        }
+        
 
         #endregion
 

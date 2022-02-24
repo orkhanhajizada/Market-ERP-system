@@ -100,6 +100,12 @@ namespace MarketERP.Services
                     case 4:
                         MenuServices.DisplaySales();
                         break;
+                    case 5:
+                        MenuServices.DisplaySalesByDateRange();
+                        break;
+                    case 6:
+                        MenuServices.DisplaySalesByPriceRange();
+                        break;
                     case 9:
                         Program.MainMenu();
                         break;
